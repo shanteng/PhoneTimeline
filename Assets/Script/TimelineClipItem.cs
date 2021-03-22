@@ -23,23 +23,24 @@ public class TimelineClipItem : MonoBehaviour
         this._drager._dragCall = this.OnDrag;
         this._drager._endCall = this.OnEndDrag;
         this._drager.SetEnable(false);
-        _selected.gameObject.SetActive(false);
+        _selected.SetActive(false);
         this._clickBtn.onClick.AddListener(OnClick);
     }
 
     private void OnClick()
     {
-        //TimelineEditView.me.OnClickTimelineClick(this._uid);
+        PhoneTimeLineUi.me.OnClickTimelineClick(this._uid);
     }
 
     public void OnBeginDrag(PointerEventData eventData) { }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (this._selected.gameObject.activeSelf)
+        if (this._selected.activeSelf)
         {
-            float percent = eventData.delta.x / this._rootWidth * this._totleDuration;
-            //TimelineClipTips.Ins.OnStartValueChange(percent);
+            //只有选中得可以进行拖拽
+            float percent = eventData.delta.x / this._rootWidth * this._totleDuration*0.01f;
+            ClipTipsUi.Ins.OnStartValueChange(percent);
         }
     }
 
@@ -47,7 +48,7 @@ public class TimelineClipItem : MonoBehaviour
 
     public void SetDetails(TimelineClip clip, string uid, float rootWidth,float duration)
     {
-        this._totleDuration = duration * 0.01f;
+        this._totleDuration = duration;
         this._rootWidth = rootWidth;
         this._uid = uid;
         this._clip = clip;
@@ -75,7 +76,7 @@ public class TimelineClipItem : MonoBehaviour
     {
         bool isSelect = guid == this._uid;
         this._drager.SetEnable(isSelect);
-        this._selected.gameObject.SetActive(isSelect);
+        this._selected.SetActive(isSelect);
     }
 
     public TimelineClip GetClip()
